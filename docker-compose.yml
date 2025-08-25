@@ -1,0 +1,75 @@
+networks:
+  net_dbms1:
+  net_dbms2:
+  net_common:
+
+services:
+  # Databse microservice 1
+  dbms1:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: jeusma
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: dbms1
+    volumes:
+      - ./init-scripts/products.sql:/docker-entrypoint-initdb.d/products.sql
+    networks:
+      - net_dbms1
+
+  # Databse microservice 2
+  dbms2:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: jeusma
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: dbms2
+    volumes:
+      - ./init-scripts/countries.sql:/docker-entrypoint-initdb.d/countries.sql
+      - ./init-scripts/coupons.sql:/docker-entrypoint-initdb.d/coupons.sql
+    networks:
+      - net_dbms2
+
+  # Pgadmin4
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: jeusma@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "80:80"
+    depends_on:
+      - dbms1
+      - dbms2
+    networks:
+      - net_dbms1
+      - net_dbms2
+
+  microservicio1:
+    build: ./microservicio1
+    env_file:
+      - ./microservicio1/core/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - dbms1
+    networks:
+      - net_dbms1
+      - net_common
+  
+  microservicio2:
+    build: ./microservicio2
+    env_file:
+      - ./microservicio2/core/.env
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dbms2
+    networks:
+      - net_dbms2
+      - net_common
