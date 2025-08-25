@@ -62,13 +62,17 @@ class PricingRepositoryImpl(PricingRepository):
             logger.info(f"{str(product_data)}")
             return response
         
+        #Diligenciamos los datos faltantes de la respuesta
         response.sku = pricing.sku
         response.product_name = product_data['name']
         response.base_price = product_data['base_price']
         response.coupon = pricing.coupon
 
+        #Calculamos el precio final
         precio_descuento = product_data['base_price'] * (1 - (response.discount_coupon/100))
         iva = precio_descuento * (response.iva /100)
+
+        #Asignamos el precio final
         response.final_price =  precio_descuento + iva
 
         return response
