@@ -72,7 +72,7 @@ Los scripts en `init-scripts/` crean las tablas y datos iniciales para productos
 
 ## Pruebas
 
-Las pruebas unitarias están organizadas por microservicio:
+Las pruebas unitarias y de integración están organizadas por microservicio:
 
 - `microservicio1/tests/`: Pruebas para los endpoints de productos.
 - `microservicio2/tests/`: Pruebas para los endpoints de precios
@@ -111,4 +111,4 @@ Las pruebas unitarias están organizadas por microservicio:
 Las pruebas cubren:
 
 - **microservicio1:** Todos los endpoints de productos (creación, consulta, actualización, listado y eliminación).
-- **microservicio2:** Los endpoints de precios, incluyendo el cálculo de precio final, validación de país y producto, y manejo de cupones.
+- **microservicio2:** Los endpoints de precios, incluyendo la integración con el microservicio1, el cálculo de precio final, validación de país y producto, y manejo de cupones.
