@@ -74,3 +74,15 @@ services:
     networks:
       - net_dbms2
       - net_common
+  
+  microservicio3:
+    build: ./microservicio3
+    env_file:
+      - ./microservicio3/core/.env
+    ports:
+      - "8501:8501"
+    depends_on:
+      - microservicio1
+      - microservicio2
+    networks:
+      - net_common
